@@ -97,7 +97,12 @@ const SocialAuth = () => {
       <span>
         <FaTwitter />
       </span>
-      <a href='https://github.com/login/oauth/authorize?client_id=Iv1.337f8d37602d7dac&redirect_uri=http://localhost:3000/login'>
+      {/* <a href='https://github.com/login/oauth/authorize?client_id=Iv1.337f8d37602d7dac&redirect_uri=http://localhost:3000/login'>
+        <span>
+          <FaGithub />
+        </span>
+      </a> */}
+      <a href='https://github.com/login/oauth/authorize?client_id=Iv1.337f8d37602d7dac&redirect_uri=https://loving-nobel-15448e.netlify.app/login'>
         <span>
           <FaGithub />
         </span>

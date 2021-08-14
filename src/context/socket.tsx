@@ -32,7 +32,7 @@ const SocketProvider = ({ children }: Props) => {
   useEffect(() => {
     if (user._id) {
       setSocket(
-        io('http://localhost:5000', {
+        io('https://luong-chat-app.herokuapp.com', {
           path: '/chat-app-socket.io',
         })
       );
