@@ -1,4 +1,4 @@
-import { useState, MouseEvent, useRef } from 'react';
+import { useState, MouseEvent, useRef, useEffect } from 'react';
 import { FaCaretDown, FaCaretUp, FaUserCircle } from 'react-icons/fa';
 import { MdExitToApp, MdGroup, MdSearch } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
@@ -9,17 +9,29 @@ import useEventListener from '../../hooks/useEventListener';
 import { MenuWrapper, Wrapper } from './ChatSidebar.styles';
 import no_user from '../../assets/no_user.png';
 import { useSocketContext } from '../../context/socket';
+import { Spinner } from '../Spinner/Spinner.styles';
+import axiosClient from '../../api/axiosClient';
+import { search } from '../../features/channel/channelSlice';
 
 interface Props {
   isAllChannel: boolean;
   setIsAllChannel: React.Dispatch<React.SetStateAction<boolean>>;
   isShowLeft: boolean;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   // setIsShowLeft: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ChatSidebar = ({ isShowLeft, isAllChannel, setIsAllChannel }: Props) => {
+const ChatSidebar = ({
+  isShowLeft,
+  isAllChannel,
+  setIsAllChannel,
+  loading,
+  setLoading,
+}: Props) => {
   const { selectedChannel, setSelectedChannel } = useSocketContext();
   const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
+  const [temp, setTemp] = useState<string>('');
   const ref = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const dispatch = useDispatch();
@@ -60,6 +72,39 @@ const ChatSidebar = ({ isShowLeft, isAllChannel, setIsAllChannel }: Props) => {
     }
   });
 
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      const res = await axiosClient().get('/channels/search', {
+        params: {
+          searchTerm: temp,
+        },
+      });
+      dispatch(search(res.data));
+      console.log(res);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [temp]);
+
+  if (loading) {
+    return (
+      <Wrapper isShowLeft={isShowLeft}>
+        <div
+          style={{
+            display: 'flex',
+            marginTop: '30px',
+            width: '100%',
+            justifyContent: 'center',
+          }}
+        >
+          <Spinner />
+        </div>
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper isShowLeft={isShowLeft}>
       {!isAllChannel ? (
@@ -83,7 +128,12 @@ const ChatSidebar = ({ isShowLeft, isAllChannel, setIsAllChannel }: Props) => {
       ) : (
         <>
           <div className='search'>
-            <input type='text' placeholder='Search' />
+            <input
+              type='text'
+              placeholder='Search'
+              value={temp}
+              onChange={(e) => setTemp(e.target.value)}
+            />
             <MdSearch />
           </div>
           <div className='channels'>

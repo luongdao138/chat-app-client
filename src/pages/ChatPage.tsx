@@ -19,12 +19,14 @@ const ChatPage = () => {
   const { selectedChannel, setSelectedChannel, socket } = useSocketContext();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
+  const [loadingData, setLoadingData] = useState(false);
 
   useEffect(() => {
     dispatch(getChannels());
 
     return () => {
       if (selectedChannel) {
+        console.log('OK');
         setSelectedChannel(null);
         socket?.emit('leaveChannel', {
           user_id: user._id,
@@ -36,17 +38,15 @@ const ChatPage = () => {
 
   useEffect(() => {
     if (selectedChannel) {
-      const getChannelDetail = async () => {
-        const res = await axiosClient().get(`/channels/${selectedChannel}`);
-        dispatch(fetch(res.data));
+      const getData = async () => {
+        setLoadingData(true);
+        const res1 = await axiosClient().get(`/channels/${selectedChannel}`);
+        const res2 = await axiosClient().get(`/messages/${selectedChannel}`);
+        dispatch(fetch(res1.data));
+        dispatch(fetchAll(res2.data));
+        setLoadingData(false);
       };
-      const getMessages = async () => {
-        const res = await axiosClient().get(`/messages/${selectedChannel}`);
-        dispatch(fetchAll(res.data));
-      };
-
-      getChannelDetail();
-      getMessages();
+      getData();
     }
   }, [selectedChannel, dispatch]);
 
@@ -64,8 +64,10 @@ const ChatPage = () => {
           isShowLeft={isShowLeft}
           isAllChannel={isAllChannel}
           setIsAllChannel={setIsAllChannel}
+          loading={loadingData}
+          setLoading={setLoadingData}
         />
-        <ChatMessages />
+        <ChatMessages loading={loadingData} />
       </Content>
     </>
   );

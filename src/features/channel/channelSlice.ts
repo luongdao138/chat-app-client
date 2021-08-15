@@ -15,6 +15,9 @@ const channelSlice = createSlice({
     add: (state, { payload }: PayloadAction<Channel>) => {
       state.list.push(payload);
     },
+    search: (state, { payload }: PayloadAction<Channel[]>) => {
+      state.list = payload;
+    },
   },
   extraReducers: {
     [getChannels.pending.type]: (state) => {
@@ -34,5 +37,5 @@ const channelSlice = createSlice({
   },
 });
 
-export const { add } = channelSlice.actions;
+export const { add, search } = channelSlice.actions;
 export default channelSlice.reducer;

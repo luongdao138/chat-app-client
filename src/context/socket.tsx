@@ -35,6 +35,9 @@ const SocketProvider = ({ children }: Props) => {
         io('https://luong-chat-app.herokuapp.com', {
           path: '/chat-app-socket.io',
         })
+        // io('http://localhost:5000', {
+        //   path: '/chat-app-socket.io',
+        // })
       );
     }
 

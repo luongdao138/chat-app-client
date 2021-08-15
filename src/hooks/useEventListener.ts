@@ -14,7 +14,7 @@ const useEventListener = (
   }, [listener]);
 
   useEffect(() => {
-    if (!target.addEventListener) return;
+    if (!target || !target.addEventListener) return;
     const eventListener = (e: any) => listenerRef.current(e);
     target.addEventListener(eventType, eventListener);
 

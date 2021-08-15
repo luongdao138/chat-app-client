@@ -23,7 +23,7 @@ export const convertMessages = (messages: Message[]): MessageResult[] => {
       isExist.messages.push(message);
     } else {
       result.push({
-        messages: [],
+        messages: [message],
         time,
       });
     }
