@@ -38,7 +38,7 @@ const EditProfileForm = () => {
     display_name: user.display_name || '',
     photo: user.photo,
   });
-  const [password, setPassword] = useState<string>('********');
+  const [password, setPassword] = useState<string>('');
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(user.photo);
   const [file, setFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
