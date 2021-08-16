@@ -114,11 +114,11 @@ const ChatSidebar = ({
           <div className='channel-mems'>
             <p className='title'>Members</p>
             <div className='mems-wrapper'>
-              {channelDetail.members?.map((member) => {
+              {channelDetail.members?.map((member, index) => {
                 return (
-                  <div className='mems-item' key={member.user._id}>
-                    <img src={member.user.photo || no_user} alt='' />
-                    <span>{member.user.display_name}</span>
+                  <div className='mems-item' key={member.user?._id || index}>
+                    <img src={member.user?.photo || no_user} alt='' />
+                    <span>{member.user?.display_name}</span>
                   </div>
                 );
               })}
